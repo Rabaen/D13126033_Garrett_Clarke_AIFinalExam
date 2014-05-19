@@ -35,6 +35,15 @@ class AttackingState:State
         float range = 10.0f;
         timeShot += Time.deltaTime;
         float fov = Mathf.PI / 4.0f;
+
+		if(enemyGameObject = myGameObject)
+		{
+			GameObject other = GameObject.FindGameObjectWithTag("teaser");
+			enemyGameObject = other;
+		}
+
+
+
         // Can I see the enemy?
 
         if ((enemyGameObject.transform.position - myGameObject.transform.position).magnitude > range)
@@ -53,8 +62,9 @@ class AttackingState:State
                 {
                     GameObject lazer = new GameObject();
                     lazer.AddComponent<Lazer>();
-                    lazer.transform.position = myGameObject.transform.position;
+					lazer.transform.position = myGameObject.transform.position;
                     lazer.transform.forward = myGameObject.transform.forward;
+					myGameObject.GetComponent<SteeringBehaviours>().Ammo --; //reduce ammo when firing
                     timeShot = 0.0f;
                 }
             }

@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SteeringBehaviours : MonoBehaviour {
+
+	public int Ammo = 10;
+	public List<GameObject> Enemies = new List<GameObject>();
 
     // Flags to enable or disable the variour behaviours
     public bool SeekEnabled;
@@ -136,7 +140,7 @@ public class SteeringBehaviours : MonoBehaviour {
 
     Vector3 Evade()
     {
-        float dist = (evadeTarget.transform.position - transform.position).magnitude;
+        //float dist = (evadeTarget.transform.position - transform.position).magnitude;
         float lookAhead = maxSpeed;
 
         Vector3 targetPos = evadeTarget.transform.position + (lookAhead * evadeTarget.GetComponent<SteeringBehaviours>().velocity);
@@ -177,6 +181,19 @@ public class SteeringBehaviours : MonoBehaviour {
             force += FollowPath();
         }
 
+
+		GameObject AmmoUp = GameObject.FindGameObjectWithTag("Ammo");
+		if(Ammo <= 0)  //if ammo is less than 0 seek ammo object
+		{
+			Seek(AmmoUp.transform.position);
+		}
+
+		float toAmmo = (this.transform.position - AmmoUp.transform.position).magnitude;
+		if(toAmmo <= 5.0f)
+		{
+			Ammo = 10;
+		}
+
         Vector3 acceleration = force / mass;
         velocity += acceleration * Time.deltaTime;
         float speed = velocity.magnitude;
@@ -193,4 +210,10 @@ public class SteeringBehaviours : MonoBehaviour {
         }
         force = Vector3.zero;	    
 	}
+
+	//GameObject FindClosest()
+	//{
+	//	GameObject enemy = GameObject.FindGameObjectWithTag("teaser");
+	//}
+
 }
